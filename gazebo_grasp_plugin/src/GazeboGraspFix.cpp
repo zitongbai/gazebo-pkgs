@@ -795,8 +795,8 @@ void GazeboGraspFix::OnUpdate()
       }
       GazeboGraspGripper &graspingGripper = gggIt->second;
       // Now, detach the object:
-      gzmsg << "GazeboGraspFix: Detaching " << objName << " from gripper " <<
-            graspingGripperName << "." << std::endl;
+      RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "GazeboGraspFix: Detaching " << objName << " from gripper " <<
+            graspingGripperName << ".");
       graspingGripper.HandleDetach(objName);
       this->OnDetach(objName, graspingGripperName);
       gripCntIt->second = 0;

@@ -8,6 +8,7 @@
 
 #include <gazebo_grasp_plugin/GazeboGraspGripper.h>
 #include <gazebo_version_helpers/GazeboVersionHelpers.h>
+#include "rclcpp/rclcpp.hpp"
 
 using gazebo::GazeboGraspGripper;
 
@@ -61,8 +62,8 @@ bool GazeboGraspGripper::Init(physics::ModelPtr &_model,
   this->palmLink = this->model->GetLink(palmLinkName);
   if (!this->palmLink)
   {
-    gzerr << "GazeboGraspGripper: Palm link " << palmLinkName <<
-          " not found. The gazebo grasp plugin will not work." << std::endl;
+    RCLCPP_ERROR_STREAM(rclcpp::get_logger("grasp"), "GazeboGraspGripper: Palm link " << palmLinkName <<
+          " not found. The gazebo grasp plugin will not work.");
     return false;
   }
   for (std::vector<std::string>::const_iterator fingerIt =
@@ -73,9 +74,8 @@ bool GazeboGraspGripper::Init(physics::ModelPtr &_model,
     //gzmsg<<"Got link "<<fingerLinkElem->Get<std::string>()<<std::endl;
     if (!link.get())
     {
-      gzerr << "GazeboGraspGripper ERROR: Link " << *fingerIt <<
-            " can't be found in gazebo for GazeboGraspGripper model plugin. Skipping." <<
-            std::endl;
+      RCLCPP_ERROR_STREAM(rclcpp::get_logger("grasp"), "GazeboGraspGripper ERROR: Link " << *fingerIt <<
+            " can't be found in gazebo for GazeboGraspGripper model plugin. Skipping.");
       continue;
     }
     for (unsigned int j = 0; j < link->GetChildCount(); ++j)
@@ -88,9 +88,8 @@ bool GazeboGraspGripper::Init(physics::ModelPtr &_model,
       if (collIter !=
           this->collisionElems.end())   //this collision was already added before
       {
-        gzwarn << "GazeboGraspGripper: Adding Gazebo collision link element " <<
-               collName << " multiple times, the gazebo grasp handler may not work properly" <<
-               std::endl;
+        RCLCPP_WARN_STREAM(rclcpp::get_logger("grasp"), "GazeboGraspGripper: Adding Gazebo collision link element " <<
+               collName << " multiple times, the gazebo grasp handler may not work properly");
         continue;
       }
       this->collisionElems[collName] = collision;
@@ -146,14 +145,13 @@ bool GazeboGraspGripper::HandleAttach(const std::string &objName)
 {
   if (!this->palmLink)
   {
-    gzwarn << "GazeboGraspGripper: palm link not found, not enforcing grasp hack!\n"
-           << std::endl;
+    RCLCPP_WARN_STREAM(rclcpp::get_logger("grasp"), "GazeboGraspGripper: palm link not found, not enforcing grasp hack!\n");
     return false;
   }
   physics::WorldPtr world = this->model->GetWorld();
   if (!world.get())
   {
-    gzerr << "GazeboGraspGripper: world is NULL" << std::endl;
+    RCLCPP_ERROR_STREAM(rclcpp::get_logger("grasp"), "GazeboGraspGripper: world is NULL");
     return false;
   }
 #ifdef USE_MODEL_ATTACH
@@ -172,6 +170,8 @@ bool GazeboGraspGripper::HandleAttach(const std::string &objName)
     boost::dynamic_pointer_cast<physics::Collision>(gazebo::GetEntityByName(world, objName));
   if (!obj.get())
   {
+    RCLCPP_ERROR_STREAM(rclcpp::get_logger("grasp"), "ERROR: Object " << objName <<
+              " not found in world, can't attach it");
     std::cerr << "ERROR: Object " << objName <<
               " not found in world, can't attach it" << std::endl;
     return false;
@@ -206,7 +206,7 @@ void GazeboGraspGripper::HandleDetach(const std::string &objName)
   physics::WorldPtr world = this->model->GetWorld();
   if (!world.get())
   {
-    gzerr << "GazeboGraspGripper: world is NULL" << std::endl << std::endl;
+    RCLCPP_ERROR_STREAM(rclcpp::get_logger("grasp"), "GazeboGraspGripper: world is NULL");
     return;
   }
 #ifdef USE_MODEL_ATTACH
@@ -223,6 +223,8 @@ void GazeboGraspGripper::HandleDetach(const std::string &objName)
                               (gazebo::GetEntityByName(world, objName));
   if (!obj.get())
   {
+    RCLCPP_ERROR_STREAM(rclcpp::get_logger("grasp"), "ERROR: Object " << objName <<
+              " not found in world, can't attach it");
     std::cerr << "ERROR: Object " << objName <<
               " not found in world, can't attach it" << std::endl;
     return;

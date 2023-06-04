@@ -824,7 +824,7 @@ void GazeboGraspFix::OnUpdate()
 void GazeboGraspFix::OnContact(const ConstContactsPtr &_msg)
 {
   //gzmsg<<"CONTACT! "<<std::endl;//<<_contact<<std::endl;
-  RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "CONTACT! ");
+  // RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "CONTACT! ");
   // for all contacts...
   for (int i = 0; i < _msg->contact_size(); ++i)
   {

@@ -14,7 +14,7 @@ using gazebo::GazeboGraspFix;
 using gazebo::GzVector3;
 
 #define DEFAULT_FORCES_ANGLE_TOLERANCE 120
-#define DEFAULT_UPDATE_RATE 5
+#define DEFAULT_UPDATE_RATE 1
 #define DEFAULT_MAX_GRIP_COUNT 10
 #define DEFAULT_RELEASE_TOLERANCE 0.005
 #define DEFAULT_DISABLE_COLLISIONS_ON_ATTACH false
@@ -363,8 +363,8 @@ bool GazeboGraspFix::ObjectAttachedToGripper(const std::string &gripperName,
         gripperName);
   if (gIt == grippers.end())
   {
-    gzerr << "GazeboGraspFix: Inconsistency, gripper " << gripperName <<
-          " not found in GazeboGraspFix grippers" << std::endl;
+    RCLCPP_ERROR_STREAM(rclcpp::get_logger("grasp"), "GazeboGraspFix: Inconsistency, gripper " << gripperName <<
+          " not found in GazeboGraspFix grippers");
     return false;
   }
   const GazeboGraspGripper &gripper = gIt->second;
@@ -451,12 +451,14 @@ bool CheckGrip(const std::vector<GzVector3> &forces,
   if (((lengthRatio > 1) || (lengthRatio < 0)) && (lengthRatio > 1e-04
       && (fabs(lengthRatio - 1) > 1e-04)))
   {
+    RCLCPP_ERROR_STREAM(rclcpp::get_logger("grasp"), "ERROR: CheckGrip: always specify a lengthRatio of [0..1]");
     std::cerr << "ERROR: CheckGrip: always specify a lengthRatio of [0..1]" <<
               std::endl;
     return false;
   }
   if (minAngleDiff < M_PI_2)
   {
+    RCLCPP_ERROR_STREAM(rclcpp::get_logger("grasp"), "ERROR: CheckGrip: min angle must be at least 90 degrees (PI/2)");
     std::cerr << "ERROR: CheckGrip: min angle must be at least 90 degrees (PI/2)" <<
               std::endl;
     return false;
@@ -510,7 +512,7 @@ void GazeboGraspFix::OnUpdate()
   this->mutexContacts.unlock();
 
   // contPoints now contains CollidingPoint objects for each *object* and *link*.
-
+  RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "onUpdate()");
   // Iterate through all contact points to gather all summed forces
   // (and other useful information) for all the objects (so we have all forces on one object).
   std::map<std::string, std::map<std::string, CollidingPoint> >::iterator objIt;
@@ -612,18 +614,18 @@ void GazeboGraspFix::OnUpdate()
           graspingGripperName);
     if (gIt == grippers.end())
     {
-      gzerr << "GazeboGraspFix: Inconsistency, gripper '" << graspingGripperName
+      RCLCPP_ERROR_STREAM(rclcpp::get_logger("grasp"), "GazeboGraspFix: Inconsistency, gripper '" << graspingGripperName
             << "' not found in GazeboGraspFix grippers, so cannot do attachment of object "
-            << objName << std::endl;
+            << objName);
       continue;
     }
     GazeboGraspGripper &graspingGripper = gIt->second;
 
     if (graspingGripper.isObjectAttached())
     {
-      gzerr << "GazeboGraspFix has found that object " <<
+      RCLCPP_ERROR_STREAM(rclcpp::get_logger("grasp"), "GazeboGraspFix has found that object " <<
             graspingGripper.attachedObject() << " is already attached to gripper " <<
-            graspingGripperName << ", so can't grasp '" << objName << "'!" << std::endl;
+            graspingGripperName << ", so can't grasp '" << objName << "'!");
       continue;
     }
 
@@ -720,6 +722,8 @@ void GazeboGraspFix::OnUpdate()
     initCollIt = this->attachGripContacts.find(objName);
     if (initCollIt == this->attachGripContacts.end())
     {
+      RCLCPP_ERROR_STREAM(rclcpp::get_logger("grasp"), "ERROR: Consistency: Could not find attachGripContacts for " <<
+                objName);
       std::cerr << "ERROR: Consistency: Could not find attachGripContacts for " <<
                 objName << std::endl;
       continue;
@@ -789,8 +793,8 @@ void GazeboGraspFix::OnUpdate()
             graspingGripperName);
       if (gggIt == grippers.end())
       {
-        gzerr << "GazeboGraspFix: Inconsistency: Gazebo gripper '" <<
-              graspingGripperName << "' not found when checking for detachment" << std::endl;
+        RCLCPP_ERROR_STREAM(rclcpp::get_logger("grasp"), "GazeboGraspFix: Inconsistency: Gazebo gripper '" <<
+              graspingGripperName << "' not found when checking for detachment");
         continue;
       }
       GazeboGraspGripper &graspingGripper = gggIt->second;
@@ -835,8 +839,7 @@ void GazeboGraspFix::OnContact(const ConstContactsPtr &_msg)
           (count != _msg->contact(i).wrench_size()) ||
           (count != _msg->contact(i).depth_size()))
       {
-        gzerr << "GazeboGraspFix: Contact message has invalid array sizes\n" <<
-              std::endl;
+        RCLCPP_ERROR_STREAM(rclcpp::get_logger("grasp"), "GazeboGraspFix: Contact message has invalid array sizes\n");
         continue;
       }
 
@@ -849,6 +852,8 @@ void GazeboGraspFix::OnContact(const ConstContactsPtr &_msg)
 
       if (contact.count < 1)
       {
+        RCLCPP_ERROR_STREAM(rclcpp::get_logger("grasp"), "ERROR: GazeboGraspFix: Not enough forces given for contact of ."
+                  << name1 << " / " << name2);
         std::cerr << "ERROR: GazeboGraspFix: Not enough forces given for contact of ."
                   << name1 << " / " << name2 << std::endl;
         continue;

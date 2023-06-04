@@ -535,7 +535,7 @@ void GazeboGraspFix::OnUpdate()
       CollidingPoint &collP = lIt->second;
       GzVector3 avgForce = collP.force / collP.sum;
       // gzmsg << "Found collision with "<<linkName<<": "<<avgForce.x<<", "<<avgForce.y<<", "<<avgForce.z<<" (avg over "<<collP.sum<<")"<<std::endl;
-      RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "Found collision with "<<linkName<<": "<<avgForce.x<<", "<<avgForce.y<<", "<<avgForce.z<<" (avg over "<<collP.sum<<")");
+      RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "Found collision with "<<linkName);
       objContInfo.appliedForces.push_back(avgForce);
       // insert the gripper (if it doesn't exist yet) and increase contact counter
       int &gContactCnt = objContInfo.grippersInvolved[collP.gripperName];
@@ -608,9 +608,11 @@ void GazeboGraspFix::OnUpdate()
     if (isAttachedToGripper)
     {
       // the object is already attached to a gripper, so it does not need to be attached.
+      RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "GazeboGraspFix has found that object "<<
+      gripper.attachedObject()<<" is already attached to gripper "<<gripperName
+      gripper.attachedObject()<<" is already attached to gripper "<<gripperName);
       // gzmsg << "GazeboGraspFix has found that object "<<
       //     gripper.attachedObject()<<" is already attached to gripper "<<gripperName;
-      RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "GazeboGraspFix has found that object "<<
       //     gripper.attachedObject()<<" is already attached to gripper "<<gripperName);
       continue;
     }

@@ -608,9 +608,7 @@ void GazeboGraspFix::OnUpdate()
     if (isAttachedToGripper)
     {
       // the object is already attached to a gripper, so it does not need to be attached.
-      RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "GazeboGraspFix has found that object "<<
-      gripper.attachedObject()<<" is already attached to gripper "<<gripperName
-      gripper.attachedObject()<<" is already attached to gripper "<<gripperName);
+      RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "GazeboGraspFix has found that object that is already attached");
       // gzmsg << "GazeboGraspFix has found that object "<<
       //     gripper.attachedObject()<<" is already attached to gripper "<<gripperName;
       //     gripper.attachedObject()<<" is already attached to gripper "<<gripperName);

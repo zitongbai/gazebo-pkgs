@@ -9,7 +9,7 @@
 #include <gazebo_version_helpers/GazeboVersionHelpers.h>
 
 #include <msgs/grasp_event.pb.h>
-
+#include "rclcpp/rclcpp.hpp"
 using gazebo::GazeboGraspFix;
 using gazebo::GzVector3;
 
@@ -76,6 +76,11 @@ void GazeboGraspFix::InitValues()
 ////////////////////////////////////////////////////////////////////////////////
 void GazeboGraspFix::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
 {
+
+RCLCPP_INFO_STREAM(
+    rclcpp::get_logger("grasp"),
+    "Loading grasp plugin");
+
   gzmsg << "Loading grasp-fix plugin" << std::endl;
 
   // ++++++++++++ Read parameters and initialize fields  +++++++++++++++
@@ -286,6 +291,12 @@ void GazeboGraspFix::Load(physics::ModelPtr _parent, sdf::ElementPtr _sdf)
 
   update_connection = event::Events::ConnectWorldUpdateEnd(boost::bind(
                         &GazeboGraspFix::OnUpdate, this));
+
+
+RCLCPP_INFO_STREAM(
+    rclcpp::get_logger("grasp"),
+    "grasp plugin is loaded");
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////

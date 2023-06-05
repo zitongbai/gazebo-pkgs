@@ -13,7 +13,7 @@
 using gazebo::GazeboGraspFix;
 using gazebo::GzVector3;
 
-#define DEFAULT_FORCES_ANGLE_TOLERANCE 120
+#define DEFAULT_FORCES_ANGLE_TOLERANCE 60 // was 120
 #define DEFAULT_UPDATE_RATE 5
 #define DEFAULT_MAX_GRIP_COUNT 10
 #define DEFAULT_RELEASE_TOLERANCE 0.005

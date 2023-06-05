@@ -844,7 +844,7 @@ void GazeboGraspFix::OnContact(const ConstContactsPtr &_msg)
       std::string name2 = collision2->GetScopedName();
 
       //gzmsg<<"OBJ CONTACT! "<<name1<<" / "<<name2<<std::endl;
-      RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "OBJ CONTACT! "<<name1<<" / "<<name2);
+      // RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "OBJ CONTACT! "<<name1<<" / "<<name2);
       int count = _msg->contact(i).position_size();
 
       // Check to see if the contact arrays all have the same size.

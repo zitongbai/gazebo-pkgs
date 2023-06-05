@@ -13,7 +13,7 @@
 using gazebo::GazeboGraspFix;
 using gazebo::GzVector3;
 
-#define DEFAULT_FORCES_ANGLE_TOLERANCE 60 // was 120
+#define DEFAULT_FORCES_ANGLE_TOLERANCE 120
 #define DEFAULT_UPDATE_RATE 5
 #define DEFAULT_MAX_GRIP_COUNT 10
 #define DEFAULT_RELEASE_TOLERANCE 0.005
@@ -488,11 +488,11 @@ bool CheckGrip(const std::vector<GzVector3> &forces,
         else ratio = l1 / l2;
         // gzmsg<<"Got angle "<<angle<<", ratio "<<ratio<<std::endl;
         RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "Ratio is " << ratio << " while the min is " << lengthRatio);
-        if (ratio >= lengthRatio)
-        {
+        // if (ratio >= lengthRatio)
+        // {
           // gzmsg<<"CheckGrip() is true"<<std::endl;
           return true;
-        }
+        // }
       }
     }
   }

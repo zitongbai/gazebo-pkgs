@@ -17,7 +17,6 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(gazebo_dev REQUIRED)
-find_package(gazebo_grasp_plugin_ros REQUIRED)
 
 find_package(gazebo_ros REQUIRED)
 find_package(gazebo_msgs REQUIRED)

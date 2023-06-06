@@ -488,11 +488,11 @@ bool CheckGrip(const std::vector<GzVector3> &forces,
         else ratio = l1 / l2;
         // gzmsg<<"Got angle "<<angle<<", ratio "<<ratio<<std::endl;
         RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "Ratio is " << ratio << " while the min is " << lengthRatio);
-        // if (ratio >= lengthRatio)
-        // {
+        if (ratio >= lengthRatio)
+        {
           // gzmsg<<"CheckGrip() is true"<<std::endl;
           return true;
-        // }
+        }
       }
     }
   }
@@ -524,7 +524,7 @@ void GazeboGraspFix::OnUpdate()
   {
     std::string objName = objIt->first;
     //gzmsg<<"Examining object collisions with "<<objName<<std::endl;
-    RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "Examining object collisions with "<<objName);
+    // RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "Examining object collisions with "<<objName);
 
     // create new entry in accumulated results map and get reference to fill in:
     ObjectContactInfo &objContInfo = objectContactInfo[objName];
@@ -537,7 +537,7 @@ void GazeboGraspFix::OnUpdate()
       CollidingPoint &collP = lIt->second;
       GzVector3 avgForce = collP.force / collP.sum;
       // gzmsg << "Found collision with "<<linkName<<": "<<avgForce.x<<", "<<avgForce.y<<", "<<avgForce.z<<" (avg over "<<collP.sum<<")"<<std::endl;
-      RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "Found collision with "<<linkName);
+      // RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "Found collision with "<<linkName);
       objContInfo.appliedForces.push_back(avgForce);
       // insert the gripper (if it doesn't exist yet) and increase contact counter
       int &gContactCnt = objContInfo.grippersInvolved[collP.gripperName];
@@ -566,7 +566,7 @@ void GazeboGraspFix::OnUpdate()
     const ObjectContactInfo &objContInfo = ocIt->second;
 
     // gzmsg<<"Number applied forces on "<<objName<<": "<<objContInfo.appliedForces.size()<<std::endl;
-    RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "Number applied forces on "<<objName<<": "<<objContInfo.appliedForces.size());
+    // RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "Number applied forces on "<<objName<<": "<<objContInfo.appliedForces.size());
   
     // TODO: remove this test print, for issue #26 ------------------- 
 #if 0
@@ -698,7 +698,7 @@ void GazeboGraspFix::OnUpdate()
     // the object does not satisfy "gripped" criteria, so potentially has to be released.
 
     // gzmsg<<"NOT-GRIPPING "<<objName<<", grip count "<<gripCntIt->second<<" (threshold "<<this->gripCountThreshold<<")"<<std::endl;
-    RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "NOT-GRIPPING "<<objName<<", grip count "<<gripCntIt->second<<" (threshold "<<this->gripCountThreshold<<")");
+    // RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "NOT-GRIPPING "<<objName<<", grip count "<<gripCntIt->second<<" (threshold "<<this->gripCountThreshold<<")");
 
     if (gripCntIt->second > 0) --(gripCntIt->second);
 
@@ -713,7 +713,7 @@ void GazeboGraspFix::OnUpdate()
     const std::string &graspingGripperName = attIt->second;
 
     // gzmsg<<"Considering "<<objName<<" for detachment."<<std::endl;
-    RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "Considering "<<objName<<" for detachment.");
+    // RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "Considering "<<objName<<" for detachment.");
 
     // Object should potentially be detached now.
     // However, this happens too easily when just considering the count, as the fingers

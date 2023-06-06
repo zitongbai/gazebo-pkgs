@@ -478,11 +478,11 @@ bool CheckGrip(const std::vector<GzVector3> &forces,
       _v1/=l1;
       _v2/=l2;
       float angle=acos(_v1.Dot(_v2));*/
-      float angle = AngularDistance(v1, v2);
-      RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "Angular distance is " << angle << " while the min is " << minAngleDiff);
+      // float angle = AngularDistance(v1, v2);
+      // RCLCPP_INFO_STREAM(rclcpp::get_logger("grasp"), "Angular distance is " << angle << " while the min is " << minAngleDiff);
       // gzmsg<<"Angular distance between v1.len="<<v1.GetLength()<<" and v2.len="<<v2.GetLength()<<": "<<angle*180/M_PI<<std::endl;
-      if (angle > minAngleDiff)
-      {
+      // if (angle > minAngleDiff)
+      // {
         float ratio;
         if (l1 > l2) ratio = l2 / l1;
         else ratio = l1 / l2;
@@ -493,7 +493,7 @@ bool CheckGrip(const std::vector<GzVector3> &forces,
           // gzmsg<<"CheckGrip() is true"<<std::endl;
           return true;
         }
-      }
+      // }
     }
   }
   return false;

@@ -1,6 +1,6 @@
 #include <gazebo/transport/transport.hh>
 
-#include "gazebo_grasp_plugin_ros/msg/grasp_event.pb.h"
+#include "../msg/grasp_event.pb.h"
 #include <gazebo_grasp_plugin_ros/msg/gazebo_grasp_event.hpp>
 #include <rclcpp/rclcpp.hpp>
 

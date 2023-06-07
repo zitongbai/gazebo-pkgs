@@ -26,6 +26,7 @@ add_executable(grasp_event_republisher src/grasp_event_republisher.cpp)
 
 include_directories(
   include
+  msg
   ${rclcpp_INCLUDE_DIRS}
   ${gazebo_INCLUDE_DIRS}
   ../gazebo_grasp_plugin/

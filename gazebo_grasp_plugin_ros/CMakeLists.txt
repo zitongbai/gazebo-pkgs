@@ -9,19 +9,11 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(gazebo_dev REQUIRED)
-
 find_package(gazebo_ros REQUIRED)
 find_package(gazebo_msgs REQUIRED)
 find_package(gazebo_grasp_plugin REQUIRED)
 
 add_executable(grasp_event_republisher src/grasp_event_republisher.cpp)
-
-include_directories(
-  include
-  msg
-  ${rclcpp_INCLUDE_DIRS}
-  ${gazebo_INCLUDE_DIRS}
-)
 
 ament_target_dependencies(
   grasp_event_republisher

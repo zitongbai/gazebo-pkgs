@@ -1,12 +1,14 @@
 #include <gazebo/transport/transport.hh>
 
 #include "../msg/grasp_event.pb.h"
-#include <gazebo_grasp_plugin_ros/msg/gazebo_grasp_event.hpp>
 #include <rclcpp/rclcpp.hpp>
+#include <std_msgs/msg/string.hpp>
+#include <std_msgs/msg/bool.hpp>
 
 using GraspEventPtr = std::shared_ptr<const gazebo::msgs::GraspEvent>;
 
-rclcpp::Publisher<gazebo_grasp_plugin_ros::msg::GazeboGraspEvent>::SharedPtr graspEventPublisher;
+rclcpp::Publisher<std_msgs::msg::String>::SharedPtr graspEventPublisher;
+rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr attachedPublisher;
 
 /**
  * Callback to receive gazebo grasp event messages
@@ -15,11 +17,14 @@ void ReceiveGraspMsg(const GraspEventPtr& gzMsg)
 {
   RCLCPP_INFO_STREAM(rclcpp::get_logger("gazebo_grasp_plugin_event_republisher"), 
                      "Re-publishing grasp event: " << gzMsg->DebugString());
-  auto rosMsg = std::make_unique<gazebo_grasp_plugin_ros::msg::GazeboGraspEvent>();
-  rosMsg->arm      = gzMsg->arm();
-  rosMsg->object   = gzMsg->object();
-  rosMsg->attached = gzMsg->attached();
+
+  auto rosMsg = std::make_unique<std_msgs::msg::String>();
+  rosMsg->data = gzMsg->arm() + "," + gzMsg->object();
   graspEventPublisher->publish(std::move(rosMsg));
+
+  auto attachedMsg = std::make_unique<std_msgs::msg::Bool>();
+  attachedMsg->data = gzMsg->attached();
+  attachedPublisher->publish(std::move(attachedMsg));
 }
 
 int main(int argc, char** argv)
@@ -52,8 +57,10 @@ int main(int argc, char** argv)
   // Initialize ROS publisher
   auto rosNode = rclcpp::Node::make_shared("gazebo_grasp_plugin_event_republisher");
   const std::string pubTopic = "grasp_events";
-  graspEventPublisher =
-    rosNode->create_publisher<gazebo_grasp_plugin_ros::msg::GazeboGraspEvent>(pubTopic, 10);
+  const std::string attachedTopic = "attached_status";
+  
+  graspEventPublisher = rosNode->create_publisher<std_msgs::msg::String>(pubTopic, 10);
+  attachedPublisher = rosNode->create_publisher<std_msgs::msg::Bool>(attachedTopic, 10);
 
   rclcpp::spin(rosNode);
   rclcpp::shutdown();

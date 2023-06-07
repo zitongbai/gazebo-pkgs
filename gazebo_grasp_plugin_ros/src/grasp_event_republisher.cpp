@@ -4,6 +4,7 @@
 #include <rclcpp/rclcpp.hpp>
 #include <std_msgs/msg/string.hpp>
 #include <std_msgs/msg/bool.hpp>
+#include <boost/bind.hpp>
 
 using GraspEventPtr = std::shared_ptr<const gazebo::msgs::GraspEvent>;
 

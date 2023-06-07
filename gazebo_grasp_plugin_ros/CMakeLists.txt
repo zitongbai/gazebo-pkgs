@@ -32,6 +32,17 @@ include_directories(
   ../gazebo_grasp_plugin/
 )
 
+find_package(rosidl_default_generators REQUIRED)
+
+set(msg_files
+  "msg/GazeboGraspEvent.msg"
+)
+
+rosidl_generate_interfaces(${PROJECT_NAME}
+  ${msg_files}
+  DEPENDENCIES builtin_interfaces std_msgs
+  LIBRARY_NAME ${PROJECT_NAME}
+)
 
 ament_target_dependencies(
   grasp_event_republisher

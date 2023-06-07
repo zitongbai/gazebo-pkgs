@@ -6,14 +6,6 @@ if(NOT CMAKE_CXX_STANDARD)
   set(CMAKE_CXX_STANDARD 14)
 endif()
 
-# Emulate colcon in CLion
-if($ENV{CLION_IDE})
-  message("Running inside CLion")
-  find_package(ament_cmake REQUIRED)
-  set(CMAKE_PREFIX_PATH $ENV{AMENT_PREFIX_PATH})
-  set(gazebo_dev_DIR "${CMAKE_PREFIX_PATH}/share/gazebo_dev/cmake")
-endif()
-
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(gazebo_dev REQUIRED)

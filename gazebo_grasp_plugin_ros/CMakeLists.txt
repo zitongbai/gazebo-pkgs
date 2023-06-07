@@ -24,6 +24,14 @@ find_package(gazebo_grasp_plugin REQUIRED)
 
 add_executable(grasp_event_republisher src/grasp_event_republisher.cpp)
 
+include_directories(
+  include
+  ${rclcpp_INCLUDE_DIRS}
+  ${gazebo_INCLUDE_DIRS}
+  ../gazebo_grasp_plugin/
+)
+
+
 ament_target_dependencies(
   grasp_event_republisher
   rclcpp

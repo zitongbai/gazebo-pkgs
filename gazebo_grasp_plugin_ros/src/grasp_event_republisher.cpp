@@ -1,7 +1,7 @@
 #include <gazebo/transport/transport.hh>
 
-#include "src/gazebo-pkgs/gazebo_grasp_plugin/msgs/grasp_event.pb.h"
-#include <gazebo_grasp_plugin_ros/msg/gazebo_grasp_event.hpp>
+#include <msg/grasp_event.pb.h>
+#include <msg/gazebo_grasp_event.hpp>
 #include <rclcpp/rclcpp.hpp>
 
 using GraspEventPtr = std::shared_ptr<const gazebo::msgs::GraspEvent>;

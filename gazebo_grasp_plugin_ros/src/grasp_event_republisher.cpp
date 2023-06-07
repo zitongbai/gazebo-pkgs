@@ -14,7 +14,7 @@ rclcpp::Publisher<std_msgs::msg::Bool>::SharedPtr attachedPublisher;
 /**
  * Callback to receive gazebo grasp event messages
  */
-void ReceiveGraspMsg(const GraspEventPtr& gzMsg)
+void ReceiveGraspMsg(const boost::shared_ptr<const gazebo::msgs::GraspEvent>& gzMsg)
 {
   RCLCPP_INFO_STREAM(rclcpp::get_logger("gazebo_grasp_plugin_event_republisher"), 
                      "Re-publishing grasp event: " << gzMsg->DebugString());
@@ -46,7 +46,7 @@ int main(int argc, char** argv)
   gazebo::transport::SubscriberPtr subscriber;
   try
   {
-    subscriber = gzNode->Subscribe("~/grasp_events", boost::bind(&ReceiveGraspMsg, _1));
+    subscriber = gzNode->Subscribe("~/grasp_events", &ReceiveGraspMsg);
   }
   catch (std::exception& e)
   {

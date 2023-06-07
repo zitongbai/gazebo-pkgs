@@ -45,7 +45,7 @@ int main(int argc, char** argv)
   gazebo::transport::SubscriberPtr subscriber;
   try
   {
-    subscriber = gzNode->Subscribe("~/grasp_events", &ReceiveGraspMsg);
+    subscriber = gzNode->Subscribe("~/grasp_events", boost::bind(&ReceiveGraspMsg, _1));
   }
   catch (std::exception& e)
   {
@@ -53,6 +53,7 @@ int main(int argc, char** argv)
                         "Error subscribing to topic: " << e.what());
     return 1;
   }
+
 
   // Initialize ROS publisher
   auto rosNode = rclcpp::Node::make_shared("gazebo_grasp_plugin_event_republisher");

@@ -60,9 +60,9 @@ target_link_libraries(gazebo_grasp_fix gazebo_grasp_msgs)
 
 # Install targets
 install(TARGETS gazebo_grasp_fix gazebo_grasp_msgs
-  ARCHIVE DESTINATION lib/${PROJECT_NAME}
-  LIBRARY DESTINATION lib/${PROJECT_NAME}
-  RUNTIME DESTINATION bin/${PROJECT_NAME}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
 )
 
 install(DIRECTORY include/

@@ -905,7 +905,7 @@ void GazeboGraspFix::OnContact(const ConstContactsPtr &_msg)
 
       GzVector3 avgForce;
       // compute average/sum of the forces applied on the object
-      for (int k = 0; k < force.size(); ++k)
+      for (size_t k = 0; k < force.size(); ++k)
       {
         avgForce += force[k];
       }
